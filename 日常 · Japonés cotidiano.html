@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日常 · Japonés cotidiano</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f1e3;--card:#fffaf0;--ink:#2b2220;--red:#c1272d;--mut:#7a6a5f;--ok:#2e7d4f;--bad:#b3261e;--line:#e3d6bd;--blue:#2a5d8f;--warn:#b86e00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1716;--card:#2a2120;--ink:#f3e9d8;--mut:#b5a595;--line:#43352f;--red:#e0545a;--blue:#7fb2e5;--warn:#f0a63c}}
+:root[data-theme="dark"]{--bg:#1d1716;--card:#2a2120;--ink:#f3e9d8;--mut:#b5a595;--line:#43352f;--red:#e0545a;--blue:#7fb2e5;--warn:#f0a63c}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif}
+header{text-align:center;padding:30px 16px 6px}
+.sun{width:60px;height:60px;border-radius:50%;background:var(--red);margin:0 auto 8px;display:grid;place-items:center;color:#fff;font-size:32px;font-weight:700}
+h1{margin:0;font-size:1.8rem;letter-spacing:.12em}header p{margin:4px 0 0;color:var(--mut)}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px 12px;max-width:900px;margin:auto}
+button{font:inherit;cursor:pointer}
+.f{border:1.5px solid var(--red);background:var(--card);color:var(--red);padding:6px 13px;border-radius:999px}
+.f.on{background:var(--red);color:#fff}
+.sc{border-radius:8px;border-width:2px;font-weight:700;padding:8px 14px}
+.q{display:block;margin:6px auto 8px;background:var(--ink);color:var(--bg);border:0;padding:10px 22px;border-radius:8px;font-weight:700}
+.cnt{text-align:center;color:var(--mut);font-size:.9rem}
+#pat{max-width:760px;margin:10px auto;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;font-size:.92rem;line-height:1.5}
+#pat b{color:var(--blue)}#pat .w{color:var(--warn)}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;max-width:1100px;margin:16px auto;padding:0 16px 40px}
+.c{perspective:900px;height:340px;cursor:pointer}
+.in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.c.fl .in{transform:rotateY(180deg)}
+.s{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--red);border-radius:10px;box-shadow:0 3px 10px #0002;padding:12px;overflow:auto}
+.c.w .s{border-top-color:var(--warn)}
+.fr{display:grid;place-items:center;text-align:center}
+.fr b{font-size:3rem;font-weight:400;line-height:1.1;display:block}
+.fr .h{font-family:'Noto Sans JP',sans-serif;font-size:1.25rem;color:var(--red);margin-top:8px}
+.fr small{color:var(--mut);display:block;margin-top:8px;font-size:1.02rem}
+.bd{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--warn);border:1px solid var(--warn);border-radius:999px;padding:1px 9px}
+.bk{transform:rotateY(180deg);font-size:.88rem;line-height:1.4}
+.bk p{margin:6px 0}.bk i{color:var(--mut)}
+.jp{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif}
+.lb{font-size:.68rem;color:var(--red);font-weight:700;letter-spacing:.05em}
+.ex{font-size:1.05rem;line-height:1.5;font-weight:500}
+#quiz{max-width:560px;margin:20px auto 40px;padding:24px 16px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:12px}
+#quiz .big{font-size:3.6rem;line-height:1.2;color:var(--red)}
+.o{display:block;width:100%;margin:8px 0;padding:11px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.o.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.o.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.msg{min-height:28px;font-weight:700}
+[hidden]{display:none!important}
+</style></head><body>
+<header><div class="sun">日</div><h1>日常 · JAPONÉS COTIDIANO</h1><p>Slang · contadores · fechas · números · hora — con patrones y casos borde</p></header>
+<div id="home"><nav id="sn"></nav><nav id="nav"></nav><button class="q" id="qb"></button><div class="cnt" id="cnt"></div><div id="pat"></div><div id="grid"></div></div>
+<div id="quiz" hidden></div>
+<script>
+// sección → [título, {cat:[título, patrón]}, patrón general]
+const S={
+s:["Slang",{r:["Reacciones","<b>Patrón:</b> reacciones cortas, sin です/ます. El tono lo es todo: <i>やばい</i> puede ser elogio o desastre."],o:["Opiniones","<b>Patrón:</b> casi todos son adjetivos い y conjugan igual: うざい → うざかった / うざくない. <span class='w'>Borde:</span> 微妙 y 大丈夫 cambian de sentido según el contexto."],a:["Abreviaturas","<b>Patrón:</b> recorte de 2 moras + 2 moras (あけましておめでとう → <i>あけおめ</i>; スマートフォン → <i>スマホ</i>). Típico de chat y SNS."],f:["Fin de frase","<b>Patrón:</b> contracciones del habla: では→<i>じゃ</i>, でしょ→<i>っしょ</i>, ～てしまう→<i>～ちゃう</i> (～んでしまう→<i>～じゃう</i>), です→<i>っす</i>."]},"Slang: úsalo con amigos, no con jefes ni en textos formales."],
+c:["Contadores",{g:["Generales","<b>Patrón:</b> に 1–10 usa lecturas nativas con つ; desde 11 se usa número + objeto. <span class='w'>Borde:</span> 10 es とお (sin つ)."],p:["Personas","<b>Patrón:</b> N + 人 (にん). <span class='w'>Bordes:</span> 1 y 2 son ひとり/ふたり; 4 es よにん (nunca よんにん); edad: 20 años = はたち."],a:["Animales","<b>Patrón h→p/b:</b> con 1, 3, 6, 8, 10 la consonante cambia (いっ<i>ぴ</i>き, さん<i>び</i>き, ろっ<i>ぴ</i>き, はっ<i>ぴ</i>き, じゅっ<i>ぴ</i>き); con 2, 4, 5, 7, 9 queda <i>ひ</i>."],o:["Objetos (forma)","<b>Patrón:</b> el contador depende de la forma: plano 枚, largo 本, pequeño/redondo 個, libro 冊. 1, 6, 8, 10 suelen geminar (いっ, ろっ, はっ, じゅっ)."],m:["Máquinas y edificios","<b>Patrón:</b> máquinas 台 (regular); edificios/casas 軒; pisos 階. <span class='w'>Borde:</span> 3 軒 = さんげん, 3 階 = さんがい."],f:["Comida y bebida","<b>Patrón:</b> recipiente + contador (杯, 皿, 切れ). 杯 sigue el patrón h→p/b: いっぱい, にはい, さんばい."],t:["Tiempo y veces","<b>Patrón:</b> N + 回 (veces), 番 (turno), 週間, か月, 年. <span class='w'>Bordes:</span> 4年 = よねん, 7年 = しちねん/ななねん, 9年 = くねん."]},"Elige el contador por la <b>naturaleza del objeto</b>, no por su tamaño exacto. Cuando dudes, usa ～つ (1–10) como comodín."],
+n:["Números",{b:["Básicos 0–10","<b>Patrón:</b> 1 いち · 2 に · 3 さん · 5 ご · 6 ろく · 8 はち · 10 じゅう. <span class='w'>Bordes:</span> 0, 4, 7 y 9 tienen dos lecturas."],d:["Decenas y centenas","<b>Patrón:</b> 11 = 十 + 一; 20 = 二 + 十; 100 = ひゃく (sin いち). <span class='w'>Bordes:</span> 300 さんびゃく, 600 ろっぴゃく, 800 はっぴゃく."],g:["Miles y grandes","<b>Patrón:</b> se agrupa de a 4 dígitos (万, 億). <span class='w'>Bordes:</span> 一万 requiere いち; 3000 さんぜん; 8000 はっせん."],e:["Casos especiales","<b>Patrón:</b> en teléfonos y fracciones se lee dígito a dígito. <span class='w'>Borde:</span> fracción al revés: ‘de 3 partes, 1’ = さんぶんの いち."]},"Los números chinos (いち, に…) se combinan con casi todo; los nativos (ひとつ…) solo hasta 10."],
+d:["Fechas",{m:["Meses","<b>Patrón:</b> N + 月 (がつ). <span class='w'>Bordes:</span> 4月 しがつ (nunca よんがつ), 7月 しちがつ, 9月 くがつ."],y:["Días del mes","<b>Patrón:</b> 1–10 son nativos y hay que memorizarlos; 11+ es N + にち. <span class='w'>Bordes:</span> 1 ついたち, 14 y 24 よっか, 20 はつか."],s:["Días de semana","<b>Patrón:</b> elemento + 曜日: 日 sol, 月 luna, 火 fuego, 水 agua, 木 madera, 金 oro, 土 tierra."],r:["Relativos","<b>Patrón:</b> casi todos tienen lectura propia, no se deducen de los kanji. <span class='w'>Bordes:</span> 今日 きょう, 昨日 きのう, 明日 あした, 今年 ことし."]},"Ojo: <b>20 días</b> es はつか, pero <b>20 años</b> es はたち. Son homónimos de la misma raíz, pero se usan por separado."],
+t:["Hora",{h:["Horas","<b>Patrón:</b> N + 時 (じ). <span class='w'>Bordes:</span> 4時 よじ, 7時 しちじ, 9時 くじ."],m:["Minutos","<b>Patrón ふん/ぷん:</b> con 2, 5, 7, 9 → ふん. Con 1, 3, 4, 6, 8, 10 → ぷん (con っ en 1, 6, 8, 10). <span class='w'>Borde:</span> 4分 = よんぷん."],e:["Expresiones","<b>Patrón:</b> 午前/午後 van antes de la hora; ～ごろ = aproximadamente; ～ちょうど = en punto."],d:["Duración","<b>Patrón:</b> N + 時間 (horas de duración). <span class='w'>Bordes:</span> 4時間 よじかん, 7時間 しちじかん, 9時間 くじかん."]},"Hora = N時 + N分. La media hora es 半 (はん), el cuarto se dice 15分."]};
+// sec|cat|jp|lectura|español|nota|ejemplo|ejemplo es|!=borde
+const RAW=`s|r|やばい|やばい|¡qué fuerte! (bueno o malo)|Adjetivo comodín. Significa tanto "genial" como "terrible"; el contexto decide.|このラーメン、やばい！|¡Este ramen es una locura (de bueno)!|Kono raamen, yabai!|!
+s|r|マジ|まじ|en serio, de verdad|Viene de 真面目. マジで〜 = "de verdad…", マジ？ = "¿en serio?".|マジで？ 明日テストだよ。|¿En serio? Mañana hay examen.|Maji de? Ashita tesuto da yo.
+s|r|うそ|うそ|¡no puede ser!|Literal "mentira", pero como reacción no acusa a nadie de mentir.|うそ！ 本当に？|¡No puede ser! ¿De verdad?|Uso! Hontou ni?
+s|r|やった|やった|¡lo logré! ¡bien!|Pasado de やる; celebra un logro.|やった！ 合格した！|¡Bien! ¡Aprobé!|Yatta! Goukaku shita!
+s|r|ウケる|うける|dar risa|Del verbo 受ける; conjuga como verbo 2: ウケた, ウケない.|それ、ウケる！|¡Eso da risa!|Sore, ukeru!
+s|r|めっちゃ|めっちゃ|muy, súper|Originalmente de Kansai, hoy es nacional. Va antes del adjetivo.|めっちゃ美味しい！|¡Está riquísimo!|Meccha oishii!
+s|o|微妙|びみょう|meh, regular|No significa "sutil" en la calle: expresa algo flojo o dudoso.|この映画、ちょっと微妙。|Esta peli es medio floja.|Kono eiga, chotto bimyou.|!
+s|o|大丈夫|だいじょうぶ|estoy bien / no gracias|Según contexto: "estoy bien" o rechazo educado ("no hace falta").|袋は大丈夫です。|No necesito bolsa, gracias.|Fukuro wa daijoubu desu.|!
+s|o|ださい|ださい|cutre, de mal gusto|Opuesto de かっこいい. Informal y algo brusco.|その服、ちょっとダサい。|Esa ropa es medio cutre.|Sono fuku, chotto dasai.
+s|o|うざい|うざい|molesto, pesado|Fuerte, casi un insulto; solo entre cercanos.|あいつ、うざい。|Ese tipo es un pesado.|Aitsu, uzai.
+s|o|エモい|えもい|emotivo, nostálgico|De "emotional" + い; conjuga como adjetivo: エモかった.|この曲、エモい。|Esta canción da nostalgia.|Kono kyoku, emoi.
+s|o|ありえない|ありえない|imposible, inaceptable|Literal "no puede existir"; se usa para quejarse.|遅刻？ ありえない！|¿Llegar tarde? ¡Inaceptable!|Chikoku? Arienai!
+s|a|了解|りょうかい|entendido|En chat se abrevia a りょ.|りょ！ 後でね。|¡Entendido! Nos vemos luego.|Ryo! Ato de ne.
+s|a|あけおめ|あけおめ|feliz año nuevo|Recorte de あけましておめでとう.|あけおめ！ ことよろ！|¡Feliz año! ¡Que nos vaya bien!|Akeome! Kotoyoro!
+s|a|ことよろ|ことよろ|que sea un buen año|Recorte de 今年もよろしく.|ことよろ〜。|Que sea un buen año.|Kotoyoro~.
+s|a|スマホ|すまほ|smartphone|Recorte de スマートフォン.|スマホを忘れた。|Olvidé el móvil.|Sumaho o wasureta.
+s|a|コンビニ|こんびに|tienda de conveniencia|Recorte de コンビニエンスストア.|コンビニに行く。|Voy al konbini.|Konbini ni iku.
+s|a|お疲れ|おつかれ|buen trabajo, hasta luego|Recorte de お疲れ様. Saludo laboral muy común.|お疲れ！ また明日。|¡Buen trabajo! Hasta mañana.|Otsukare! Mata ashita.
+s|f|じゃん|じゃん|¿ves? ¡pero si…!|Contracción de ではないか. いいじゃん = "¡está bien!".|いいじゃん！|¡Está bien, ¿no?!|Ii jan!
+s|f|っしょ|っしょ|¿no? seguro que…|Recorte de でしょ.|行くっしょ？|¿Vamos, no?|Iku ssho?
+s|f|ちゃう|ちゃう|terminar haciendo, sin querer|Forma て + しまう: 食べちゃう. Con ん: 飲んじゃう. En Kansai ちゃう = "no es así".|全部食べちゃった。|Me lo comí todo (sin querer).|Zenbu tabechatta.|!
+s|f|っす|っす|es, soy (casual-cortés)|Recorte de です. Habla de jóvenes y deportistas.|おはようっす！|¡Buenos días!|Ohayou ssu!
+s|f|だよね|だよね|¿verdad? ¿cierto?|Pide acuerdo del otro.|寒いよね？|Hace frío, ¿verdad?|Samui yo ne?
+c|g|つ|つ|contador general (1–10)|1 ひとつ · 2 ふたつ · 3 みっつ · 4 よっつ · 5 いつつ · 6 むっつ · 7 ななつ · 8 やっつ · 9 ここのつ · 10 とお. Desde 11 se usa número chino.|りんごを三つください。|Tres manzanas, por favor.|Ringo o mittsu kudasai.|!
+c|p|人|にん|personas|1 ひとり · 2 ふたり (irregulares) · 3 さんにん · 4 よにん · 7 ななにん/しちにん. 5+ regular.|二人で行きます。|Vamos los dos.|Futari de ikimasu.|!
+c|p|名|めい|personas (formal)|Misma numeración que 人, pero en restaurantes u hoteles: 二名様. No usa ひとり/ふたり.|三名様ですか。|¿Son tres personas?|Sanmei-sama desu ka.
+c|p|歳|さい|años de edad|1 いっさい · 8 はっさい · 10 じゅっさい · 20 はたち (irregular). 何歳 なんさい.|二十歳です。|Tengo veinte años.|Hatachi desu.|!
+c|a|匹|ひき|animales pequeños (gato, perro, pez, insecto)|1 いっぴき · 2 にひき · 3 さんびき · 4 よんひき · 6 ろっぴき · 8 はっぴき · 10 じゅっぴき.|猫が二匹います。|Hay dos gatos.|Neko ga nihiki imasu.|!
+c|a|頭|とう|animales grandes (vaca, caballo, elefante)|1 いっとう · 2 にとう · 8 はっとう · 10 じゅっとう. Regular.|馬が三頭います。|Hay tres caballos.|Uma ga santou imasu.
+c|a|羽|わ|aves y conejos|1 いちわ · 3 さんば/さんわ · 6 ろっぱ · 8 はっぱ · 10 じゅっぱ. Los conejos cuentan como aves.|鳥が四羽います。|Hay cuatro pájaros.|Tori ga yonwa imasu.|!
+c|o|枚|まい|objetos planos (papel, camiseta, plato, billete)|Regular: いちまい · にまい · さんまい… No hay cambios.|切符を二枚ください。|Dos boletos, por favor.|Kippu o nimai kudasai.
+c|o|本|ほん|objetos largos (lápiz, botella, paraguas, película)|1 いっぽん · 2 にほん · 3 さんぼん · 6 ろっぽん · 8 はっぽん · 10 じゅっぽん.|ビールを二本。|Dos botellas de cerveza.|Biiru o nihon.|!
+c|o|個|こ|objetos pequeños o redondos|1 いっこ · 6 ろっこ · 8 はっこ · 10 じゅっこ. El resto regular.|卵を六個ください。|Seis huevos, por favor.|Tamago o rokko kudasai.
+c|o|冊|さつ|libros, cuadernos, revistas|1 いっさつ · 8 はっさつ · 10 じゅっさつ. El resto regular.|本を三冊買った。|Compré tres libros.|Hon o sansatsu katta.
+c|o|足|そく|pares de calzado y calcetines|1 いっそく · 3 さんぞく (con ぞ) · 8 はっそく · 10 じゅっそく.|靴下を二足買う。|Compro dos pares de calcetines.|Kutsushita o nisoku kau.|!
+c|m|台|だい|máquinas y vehículos (auto, TV, bici)|Regular: いちだい · にだい · さんだい…|車が三台あります。|Hay tres autos.|Kuruma ga sandai arimasu.
+c|m|軒|けん|casas y tiendas|1 いっけん · 3 さんげん (irregular) · 6 ろっけん · 8 はっけん · 10 じゅっけん.|店が三軒ある。|Hay tres tiendas.|Mise ga sangen aru.|!
+c|m|階|かい|pisos de un edificio|1 いっかい · 3 さんがい (con が) · 6 ろっかい · 8 はっかい · 10 じゅっかい. 何階 なんがい.|三階です。|Es el tercer piso.|Sangai desu.|!
+c|f|杯|はい|vasos, tazas y tazones|1 いっぱい · 2 にはい · 3 さんばい · 6 ろっぱい · 8 はっぱい · 10 じゅっぱい. いっぱい también = "lleno".|コーヒーを二杯。|Dos cafés.|Koohii o nihai.|!
+c|f|皿|さら|platos servidos|Regular: ひとさら/いちさら, ふたさら. Contar la comida por plato.|ケーキを一皿。|Un plato de pastel.|Keeki o hitosara.
+c|f|切れ|きれ|rebanadas, trozos|Regular: ひときれ, ふたきれ, さんきれ.|パンを二切れ食べた。|Comí dos rebanadas de pan.|Pan o futakire tabeta.
+c|t|回|かい|veces (frecuencia)|1 いっかい · 6 ろっかい · 8 はっかい · 10 じゅっかい. 3 es さんかい (sin rendaku, ≠ 階 さんがい).|週に二回行く。|Voy dos veces por semana.|Shuu ni nikai iku.|!
+c|t|番|ばん|turno, número de orden|1 いちばん = "el mejor". 何番 なんばん.|私は五番です。|Soy el número cinco.|Watashi wa goban desu.
+c|t|週間|しゅうかん|semanas de duración|1 いっしゅうかん · 8 はっしゅうかん · 10 じゅっしゅうかん.|二週間待った。|Esperé dos semanas.|Nishuukan matta.
+c|t|か月|かげつ|meses de duración|1 いっかげつ · 6 ろっかげつ · 8 はっかげつ · 10 じゅっかげつ.|三か月住んだ。|Viví tres meses.|Sankagetsu sunda.
+c|t|年|ねん|años de duración|4 よねん (nunca よんねん) · 7 しちねん/ななねん · 9 くねん/きゅうねん.|四年住んだ。|Viví cuatro años.|Yonen sunda.|!
+n|b|零|ゼロ/れい/まる|cero|ゼロ es lo común; れい en matemáticas o clima; まる en puntuaciones.|気温はゼロ度。|La temperatura es cero grados.|Kion wa zero do.|!
+n|b|一|いち|uno|Con contadores suele geminar: いっ.|一番です。|Es el número uno.|Ichiban desu.
+n|b|二|に|dos|Teléfono: にー.|二つください。|Dos, por favor.|Futatsu kudasai.
+n|b|三|さん|tres|Con contadores a veces rendaku: さんびき.|三人います。|Hay tres personas.|Sannin imasu.
+n|b|四|よん/し|cuatro|し suena a 死 (muerte), por eso se prefiere よん. Con 人, 年, 時: よ.|四時です。|Son las cuatro.|Yoji desu.|!
+n|b|五|ご|cinco|Teléfono: ごー.|五分待った。|Esperé cinco minutos.|Gofun matta.
+n|b|六|ろく|seis|Con contadores geminan: ろっ.|六個ください。|Seis, por favor.|Rokko kudasai.
+n|b|七|なな/しち|siete|なな es lo común; しち en 7時 y 7月.|七時です。|Son las siete.|Shichiji desu.|!
+n|b|八|はち|ocho|Con contadores geminan: はっ.|八百屋|Verdulería|Yaoya
+n|b|九|きゅう/く|nueve|く se usa en 9時 y 9月; きゅう en el resto.|九時です。|Son las nueve.|Kuji desu.|!
+n|b|十|じゅう|diez|Con contadores a menudo じゅっ.|十個ください。|Diez, por favor.|Jukko kudasai.
+n|d|十一|じゅういち|once|Patrón: 十 + unidad.|十一時です。|Son las once.|Juuichiji desu.
+n|d|二十|にじゅう|veinte|Patrón: unidad + 十.|二十人|Veinte personas|Nijuunin
+n|d|百|ひゃく|cien|No se dice いちひゃく.|百円です。|Son cien yenes.|Hyakuen desu.
+n|d|三百|さんびゃく|trescientos|Con 3 la h se vuelve b.|三百円|Trescientos yenes|Sanbyakuen|!
+n|d|六百|ろっぴゃく|seiscientos|Con 6 la h se vuelve p (con っ).|六百円|Seiscientos yenes|Roppyakuen|!
+n|d|八百|はっぴゃく|ochocientos|Con 8 la h se vuelve p (con っ).|八百円|Ochocientos yenes|Happyakuen|!
+n|g|千|せん|mil|いっせん también se dice, pero せん sola es común.|千円です。|Son mil yenes.|Sen'en desu.
+n|g|三千|さんぜん|tres mil|Con 3 せん → ぜん.|三千円|Tres mil yenes|Sanzen'en|!
+n|g|八千|はっせん|ocho mil|Con 8 se geminan.|八千円|Ocho mil yenes|Hassen'en|!
+n|g|一万|いちまん|diez mil|Aquí SÍ hace falta いち. Diez mil no es 万 solo.|一万円です。|Son diez mil yenes.|Ichiman'en desu.|!
+n|g|十万|じゅうまん|cien mil|Se lee como "10 diez-mil".|十万円|Cien mil yenes|Juuman'en
+n|g|一億|いちおく|cien millones|Se cuenta por 万 y 億, no por millón.|一億円|Cien millones de yenes|Ichioku'en|!
+n|e|二分の一|にぶんのいち|un medio (1/2)|Fracción: denominador + 分の + numerador.|二分の一|La mitad|Nibun no ichi
+n|e|三分の二|さんぶんのに|dos tercios|Primero el denominador: "de 3 partes, 2".|三分の二|Dos tercios|Sanbun no ni|!
+n|e|二点五|にてんご|2,5|Decimal: 点 (てん) como separador.|二点五|Dos coma cinco|Ni ten go
+n|e|〇九〇|ゼロきゅうゼロ|09 0 (teléfono)|En teléfonos 0 = ゼロ y se lee dígito a dígito.|ゼロきゅうゼロ|Cero-nueve-cero|Zero kyuu zero|!
+d|m|一月|いちがつ|enero|Patrón: N + 月 (がつ).|一月に行く。|Voy en enero.|Ichigatsu ni iku.
+d|m|二月|にがつ|febrero|Regular: 二 + 月.|二月は寒い。|Febrero es frío.|Nigatsu wa samui.
+d|m|三月|さんがつ|marzo|Regular: 三 + 月.|三月に卒業する。|Me gradúo en marzo.|Sangatsu ni sotsugyou suru.
+d|m|四月|しがつ|abril|Se lee し, nunca よんがつ.|四月に始まる。|Empieza en abril.|Shigatsu ni hajimaru.|!
+d|m|五月|ごがつ|mayo|Regular: 五 + 月.|五月は気持ちいい。|Mayo es agradable.|Gogatsu wa kimochi ii.
+d|m|六月|ろくがつ|junio|Regular: 六 + 月 (sin geminar).|六月は雨が多い。|En junio llueve mucho.|Rokugatsu wa ame ga ooi.
+d|m|七月|しちがつ|julio|Se lee しち, no ななつき.|七月は暑い。|Julio es caluroso.|Shichigatsu wa atsui.|!
+d|m|八月|はちがつ|agosto|Regular: 八 + 月.|八月は暑い。|Agosto es caluroso.|Hachigatsu wa atsui.
+d|m|九月|くがつ|septiembre|Se lee く, no きゅうがつ.|九月に会う。|Nos vemos en septiembre.|Kugatsu ni au.|!
+d|m|十月|じゅうがつ|octubre|Con 月 se dice じゅうがつ, no じゅっがつ.|十月に行く。|Voy en octubre.|Juugatsu ni iku.
+d|m|十一月|じゅういちがつ|noviembre|Patrón: 十 + 一 + 月.|十一月は涼しい。|Noviembre es fresco.|Juuichigatsu wa suzushii.
+d|m|十二月|じゅうにがつ|diciembre|Patrón: 十 + 二 + 月.|十二月は忙しい。|Diciembre es ajetreado.|Juunigatsu wa isogashii.
+d|m|何月|なんがつ|¿qué mes?|何 + 月 = なんがつ.|何月ですか。|¿En qué mes estamos?|Nangatsu desu ka.
+d|y|一日|ついたち|día 1|Irregular. 一日 como "un día" es いちにち.|一日は休みです。|El día 1 es feriado.|Tsuitachi wa yasumi desu.|!
+d|y|二日|ふつか|día 2|Nativo. También = "dos días".|二日待った。|Esperé dos días.|Futsuka matta.
+d|y|三日|みっか|día 3|Nativo. También = "tres días".|三日に会う。|Nos vemos el 3.|Mikka ni au.
+d|y|四日|よっか|día 4|Nativo.|四日です。|Es el 4.|Yokka desu.
+d|y|五日|いつか|día 5|Nativo.|五日に行く。|Voy el 5.|Itsuka ni iku.
+d|y|六日|むいか|día 6|Nativo.|六日に帰る。|Vuelvo el 6.|Muika ni kaeru.
+d|y|七日|なのか|día 7|Nativo.|七日は日曜日。|El 7 es domingo.|Nanoka wa nichiyoubi.
+d|y|八日|ようか|día 8|Nativo.|八日に会う。|Nos vemos el 8.|Youka ni au.
+d|y|九日|ここのか|día 9|Nativo.|九日です。|Es el 9.|Kokonoka desu.
+d|y|十日|とおか|día 10|Nativo (とお como el contador つ).|十日です。|Es el 10.|Tooka desu.
+d|y|十四日|じゅうよっか|día 14|Excepción: 14 y 24 conservan よっか.|十四日に行く。|Voy el 14.|Juuyokka ni iku.|!
+d|y|二十日|はつか|día 20|Irregular. Distinto de 二十歳 (はたち, 20 años).|二十日です。|Es el 20.|Hatsuka desu.|!
+d|y|二十四日|にじゅうよっか|día 24|Conserva よっか, igual que 14.|二十四日に会う。|Nos vemos el 24.|Nijuuyokka ni au.|!
+d|y|十一日|じゅういちにち|día 11|Desde 11 es regular: número + にち.|十一日です。|Es el 11.|Juuichinichi desu.
+d|s|日曜日|にちようび|domingo|日 = sol.|日曜日は休み。|El domingo descanso.|Nichiyoubi wa yasumi.
+d|s|月曜日|げつようび|lunes|月 = luna.|月曜日に会う。|Nos vemos el lunes.|Getsuyoubi ni au.
+d|s|火曜日|かようび|martes|火 = fuego.|火曜日に行く。|Voy el martes.|Kayoubi ni iku.
+d|s|水曜日|すいようび|miércoles|水 = agua.|水曜日は忙しい。|El miércoles estoy ocupado.|Suiyoubi wa isogashii.
+d|s|木曜日|もくようび|jueves|木 = madera.|木曜日です。|Es jueves.|Mokuyoubi desu.
+d|s|金曜日|きんようび|viernes|金 = oro.|金曜日は早く帰る。|El viernes me voy temprano.|Kinyoubi wa hayaku kaeru.
+d|s|土曜日|どようび|sábado|土 = tierra.|土曜日に遊ぶ。|El sábado salimos.|Doyoubi ni asobu.
+d|r|一昨日|おととい|anteayer|Lectura especial; no se deduce de los kanji.|おととい会った。|Nos vimos anteayer.|Ototoi atta.|!
+d|r|昨日|きのう|ayer|Lectura especial.|昨日は雨だった。|Ayer llovió.|Kinou wa ame datta.|!
+d|r|今日|きょう|hoy|Lectura especial.|今日は暑い。|Hoy hace calor.|Kyou wa atsui.|!
+d|r|明日|あした|mañana|También あす (formal) y みょうにち (muy formal).|明日行く。|Mañana voy.|Ashita iku.|!
+d|r|明後日|あさって|pasado mañana|Lectura especial.|あさって会おう。|Nos vemos pasado mañana.|Asatte aou.|!
+d|r|今年|ことし|este año|Irregular (no こんねん).|今年は忙しい。|Este año estoy ocupado.|Kotoshi wa isogashii.|!
+d|r|来年|らいねん|el año que viene|Regular: 来 + 年.|来年日本へ行く。|El año que viene voy a Japón.|Rainen Nihon e iku.
+d|r|今朝|けさ|esta mañana|Lectura especial.|今朝は寒かった。|Esta mañana hacía frío.|Kesa wa samukatta.|!
+t|h|一時|いちじ|la una|Patrón: N + 時 (じ).|一時に会う。|Nos vemos a la una.|Ichiji ni au.
+t|h|二時|にじ|las dos|Regular: 二 + 時.|二時に会う。|Nos vemos a las dos.|Niji ni au.
+t|h|三時|さんじ|las tres|Regular: 三 + 時.|三時におやつ。|A las tres, la merienda.|Sanji ni oyatsu.
+t|h|四時|よじ|las cuatro|Se lee よ, nunca よんじ.|四時に起きる。|Me levanto a las cuatro.|Yoji ni okiru.|!
+t|h|五時|ごじ|las cinco|Regular: 五 + 時.|五時に終わる。|Termina a las cinco.|Goji ni owaru.
+t|h|六時|ろくじ|las seis|Regular: 六 + 時 (sin geminar).|六時に起きる。|Me levanto a las seis.|Rokuji ni okiru.
+t|h|七時|しちじ|las siete|Se lee しち, no ななじ.|七時に寝る。|Me acuesto a las siete.|Shichiji ni neru.|!
+t|h|八時|はちじ|las ocho|Regular: 八 + 時.|八時に家を出る。|Salgo de casa a las ocho.|Hachiji ni ie o deru.
+t|h|九時|くじ|las nueve|Se lee く, no きゅうじ.|九時に始まる。|Empieza a las nueve.|Kuji ni hajimaru.|!
+t|h|十時|じゅうじ|las diez|Con 時 se dice じゅうじ, no じゅっじ.|十時に寝る。|Me acuesto a las diez.|Juuji ni neru.
+t|h|十一時|じゅういちじ|las once|Patrón: 十 + 一 + 時.|十一時に着く。|Llego a las once.|Juuichiji ni tsuku.
+t|h|十二時|じゅうにじ|las doce|Patrón: 十 + 二 + 時.|十二時に昼ご飯。|Almuerzo a las doce.|Juuniji ni hirugohan.
+t|h|何時|なんじ|¿qué hora?|何 + 時 = なんじ.|今、何時ですか。|¿Qué hora es?|Ima, nanji desu ka.
+t|m|一分|いっぷん|1 minuto|Con 1 se gemina y la h pasa a p: いっぷん.|一分待って。|Espera un minuto.|Ippun matte.|!
+t|m|二分|にふん|2 minutos|2, 5, 7, 9 usan ふん.|二分かかる。|Tarda dos minutos.|Nifun kakaru.
+t|m|三分|さんぷん|3 minutos|Con 3 el sufijo es ぷん.|三分待った。|Esperé tres minutos.|Sanpun matta.|!
+t|m|四分|よんぷん|4 minutos|Aquí 4 es よん y el sufijo ぷん. Distinto a 四時.|四分かかる。|Tarda cuatro minutos.|Yonpun kakaru.|!
+t|m|五分|ごふん|5 minutos|ふん.|五分前に着いた。|Llegué cinco minutos antes.|Gofun mae ni tsuita.
+t|m|六分|ろっぷん|6 minutos|Geminación + ぷん.|六分かかる。|Tarda seis minutos.|Roppun kakaru.|!
+t|m|八分|はっぷん|8 minutos|Geminación + ぷん.|八分待つ。|Espero ocho minutos.|Happun matsu.|!
+t|m|十分|じゅっぷん|10 minutos|También じっぷん. ぷん.|十分かかる。|Tarda diez minutos.|Juppun kakaru.|!
+t|m|半|はん|y media|Se dice después de la hora: 三時半 = 3:30.|三時半に会う。|Nos vemos a las 3:30.|Sanji han ni au.
+t|e|午前|ごぜん|a.m., de la mañana|Va antes de la hora: 午前九時.|午前九時に始まる。|Empieza a las 9 a.m.|Gozen kuji ni hajimaru.
+t|e|午後|ごご|p.m., de la tarde|Va antes de la hora: 午後三時.|午後三時に会う。|Nos vemos a las 3 p.m.|Gogo sanji ni au.
+t|e|ごろ|ごろ|aproximadamente (hora)|Solo para hora del reloj. Para cantidades se usa ぐらい.|七時ごろ起きる。|Me levanto como a las siete.|Shichiji goro okiru.
+t|e|ちょうど|ちょうど|en punto, justo|Va antes o después de la hora.|ちょうど三時です。|Son las tres en punto.|Choudo sanji desu.
+t|e|前・過ぎ|まえ・すぎ|menos / pasadas|五分前 = cinco antes; 五分過ぎ = cinco después.|三時五分前|Cinco para las tres|Sanji gofun mae
+t|d|一時間|いちじかん|1 hora (duración)|Patrón: N + 時間. Distinto a 一時 (la una).|一時間待った。|Esperé una hora.|Ichijikan matta.
+t|d|四時間|よじかん|4 horas|Se lee よ, igual que 四時.|四時間寝た。|Dormí cuatro horas.|Yojikan neta.|!
+t|d|七時間|しちじかん|7 horas|También ななじかん.|七時間働く。|Trabajo siete horas.|Shichijikan hataraku.|!
+t|d|九時間|くじかん|9 horas|Se lee く, igual que 九時.|九時間寝た。|Dormí nueve horas.|Kujikan neta.|!`;
+const JW=t=>String(t).replace(/[\u3040-\u30ff\u3400-\u9fff々〜～ー・]+/g,'<span class="jp">$&</span>');
+const D=RAW.split("\n").map(l=>{const a=l.split("|");return{s:a[0],c:a[1],k:a[2],h:a[3],m:a[4],n:a[5],e:a[6],t:a[7],r:a[8],f:a[9]=="!"}});
+const H="あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ";
+const R="a i u e o ka ki ku ke ko sa shi su se so ta chi tsu te to na ni nu ne no ha hi fu he ho ma mi mu me mo ya yu yo ra ri ru re ro wa o n ga gi gu ge go za ji zu ze zo da ji zu de do ba bi bu be bo pa pi pu pe po".split(" ");
+function ro(t){const s=[...t].map(c=>c>="ァ"&&c<="ヶ"?String.fromCharCode(c.charCodeAt(0)-96):c);let o="",g=0;
+ for(let i=0;i<s.length;i++){const c=s[i];if(c=="っ"){g=1;continue}if(c=="ー"){o+=o.slice(-1);continue}
+  const j=H.indexOf(c);if(j<0){o+=c;continue}let r=R[j];const y="ゃゅょ".indexOf(s[i+1]);
+  if(y>=0){const v="aou"[y];r=["shi","chi","ji"].includes(r)?r.slice(0,-1)+v:r.slice(0,-1)+"y"+v;i++}
+  if(g){r=(r[0]=="c"?"t":r[0])+r;g=0}o+=r}return o}
+const $=id=>document.getElementById(id);
+let sec="s",cur="all";
+const grp=()=>D.filter(d=>d.s==sec&&(cur=="all"||d.c==cur));
+function render(){
+ $("sn").innerHTML=Object.entries(S).map(([k,v])=>`<button class="f sc ${k==sec?"on":""}" data-s="${k}">${v[0]}</button>`).join("");
+ $("nav").innerHTML=[["all","Todos"],...Object.entries(S[sec][1]).map(([k,v])=>[k,v[0]])].map(([k,t])=>`<button class="f ${k==cur?"on":""}" data-v="${k}">${t}</button>`).join("");
+ document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{sec=b.dataset.s;cur="all";render()});
+ document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{cur=b.dataset.v;render()});
+ const g=grp(),name=cur=="all"?"Todos":S[sec][1][cur][0];
+ $("qb").textContent="Quiz rápido · "+S[sec][0]+" · "+name;
+ $("cnt").textContent=g.length+" tarjetas · "+g.filter(d=>d.f).length+" casos borde ⚠";
+ $("pat").innerHTML=JW(cur=="all"?S[sec][2]+"<br><span class='w'>Elige una categoría para ver su patrón.</span>":S[sec][1][cur][1]);
+ $("grid").innerHTML=g.map(d=>`<div class="c ${d.f?"w":""}"><div class="in"><div class="s fr"><div><b class="jp">${d.k}</b><div class="h jp">${d.h}</div><div class="cnt"><i>${ro(d.h)}</i></div><small>${d.m}</small>${d.f?'<span class="bd">⚠ caso borde</span>':""}</div></div>
+ <div class="s bk"><p><b class="jp" style="font-size:1.4rem;color:var(--red)">${d.k}</b> <span class="jp">${d.h}</span> <i>(${ro(d.h)})</i><br><b>${d.m}</b> ${d.f?'<span class="bd">⚠ borde</span>':""}</p>
+ <p><span class="lb">PATRÓN / LECTURAS</span><br>${JW(d.n)}</p><p><span class="lb">EJEMPLO</span><br><span class="ex jp">${d.e}</span><br><i>${d.r}</i><br>${d.t}</p></div></div></div>`).join("");
+ document.querySelectorAll(".c").forEach(c=>c.onclick=()=>c.classList.toggle("fl"));
+}
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+let Q=[],i=0,sc=0;
+$("qb").onclick=()=>{Q=shuf(grp()).slice(0,10);i=0;sc=0;$("home").hidden=true;$("quiz").hidden=false;ask()};
+function ask(){
+ const q=Q[i],pool=D.filter(d=>d.s==sec&&d!=q),near=shuf(pool.filter(d=>d.c==q.c)),far=shuf(pool.filter(d=>d.c!=q.c)),cand=[...near,...far];
+ const kind=i%3==1&&q.h!=q.k?"r":i%3==2?"j":"m";let ans,title,show,opts,key;
+ if(kind=="r"){title="¿Cómo se lee?";show=q.k;key=d=>d.h;ans=q.h}
+ else if(kind=="j"){title="¿Cómo se escribe?";show=q.m;key=d=>d.k;ans=q.k}
+ else{title="¿Qué significa?";show=q.k;key=d=>d.m;ans=q.m}
+ const ds=[...new Set(cand.map(key).filter(x=>x!=ans))].slice(0,3);opts=shuf([ans,...ds]);
+ $("quiz").innerHTML=`<div class="cnt">Pregunta ${i+1} de ${Q.length}</div><div class="big ${kind=="j"?"":"jp"}" style="${kind=="j"?"font-size:1.7rem":""}">${show}</div>${kind=="m"?`<div class="cnt jp">${q.h}</div>`:""}<p>${title}</p>`+
+ opts.map(o=>`<button class="o jp">${o}</button>`).join("")+`<div class="msg" id="msg"></div><div class="cnt" id="nt"></div><button class="q" id="nx" hidden>Siguiente</button>`;
+ document.querySelectorAll(".o").forEach(b=>b.onclick=()=>{
+  const ok=b.textContent==ans;if(ok)sc++;
+  document.querySelectorAll(".o").forEach(x=>{x.disabled=true;if(x.textContent==ans)x.classList.add("ok")});
+  if(!ok)b.classList.add("bad");
+  $("msg").textContent=ok?"✔ ¡Correcto!":"✘ Incorrecto. Respuesta correcta: "+ans;$("msg").style.color=ok?"var(--ok)":"var(--bad)";
+  $("nt").innerHTML=JW(q.n);$("nx").hidden=false;$("nx").textContent=i+1<Q.length?"Siguiente":"Ver puntaje";
+  $("nx").onclick=()=>{i++;i<Q.length?ask():end()};
+ });
+}
+function end(){
+ $("quiz").innerHTML=`<div class="sun">${sc}</div><h2>Puntaje: ${sc} / ${Q.length}</h2><button class="q" id="bk">Volver a las tarjetas</button>`;
+ $("bk").onclick=()=>{$("quiz").hidden=true;$("home").hidden=false;render()};
+}
+render();
+</script></body></html>
